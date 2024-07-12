@@ -55,7 +55,3 @@ class ProductsEntity {
   List<String>? images;
   String? thumbnail;
 }
-
-
-
-

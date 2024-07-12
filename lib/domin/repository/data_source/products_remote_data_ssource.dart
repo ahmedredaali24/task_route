@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 
-
 import '../../entity/ProductResponseEntity.dart';
 import '../../entity/failures.dart';
 

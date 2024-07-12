@@ -4,12 +4,13 @@ import 'package:like_button/like_button.dart';
 
 import 'dart:math';
 
+import '../../../../domin/entity/ProductResponseEntity.dart';
 import '../../../utils/app_colors.dart';
 
 class ProductItems extends StatelessWidget {
+  final ProductsEntity productsEntity;
 
-
-  ProductItems({super.key});
+  ProductItems({super.key, required this.productsEntity});
 
   final randomColor =
       Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(.35);
@@ -28,56 +29,64 @@ class ProductItems extends StatelessWidget {
         ),
       ),
       child: SingleChildScrollView(
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15.r),
-                      topRight: Radius.circular(15.r)),
-                  child: Container(
-                    color: randomColor,
-                    child:Image.network(
-                      "",
-                      fit: BoxFit.fill,
-                      width: double.infinity,
-                      height: 115.h,
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.r),
+                        topRight: Radius.circular(15.r)),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        color: randomColor,
+                        child: Image.network(
+                          "${productsEntity.thumbnail}",
+                          fit: BoxFit.fill,
+                          width: 191.w,
+                          height: MediaQuery.of(context).size.height * 0.13,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 5.h,
-                  right: 1.w,
-                  child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 20.r,
-                      child: Center(
-                        child: LikeButton(
-                          circleColor: const CircleColor(
-                              start: Colors.red, end: Colors.blue),
-                          bubblesColor: const BubblesColor(
-                            dotPrimaryColor: Colors.pink,
-                            dotSecondaryColor: Colors.white,
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * .005,
+                    right: MediaQuery.of(context).size.width * .005,
+                    child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        // radius: MediaQuery.of(context).size.aspectRatio * 30,
+                        child: Center(
+                          child: LikeButton(
+                            
+                            // size: 50,
+                            circleColor: const CircleColor(
+                                start: Colors.red, end: Colors.blue),
+                            bubblesColor: const BubblesColor(
+
+                              dotPrimaryColor: Colors.pink,
+                              dotSecondaryColor: Colors.white,
+                            ),
+                            likeBuilder: (bool isLiked) {
+                              return isLiked
+                                  ? Icon(
+                                      size: 30,
+                                      Icons.favorite_rounded,
+                                      color: AppColors.primaryColor,
+                                    )
+                                  : const Icon(
+                                      Icons.favorite_border_rounded,
+                                      color: AppColors.primaryColor,
+                                    );
+                            },
                           ),
-                          likeBuilder: (bool isLiked) {
-                            return isLiked
-                                ? Icon(
-                                    size: 30.sp,
-                                    Icons.favorite_rounded,
-                                    color: AppColors.primaryColor,
-                                  )
-                                : const Icon(
-                                    Icons.favorite_border_rounded,
-                                    color: AppColors.primaryColor,
-                                  );
-                          },
-                        ),
-                      )),
-                )
-              ],
+                        )),
+                  )
+                ],
+              ),
             ),
             SizedBox(
               height: 7.h,
@@ -85,7 +94,7 @@ class ProductItems extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 8.w),
               child: Text(
-                'title',
+                "${productsEntity.title}",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
@@ -101,7 +110,7 @@ class ProductItems extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 8.w),
               child: Text(
-                "EGP price",
+                "EGP ${productsEntity.price}",
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
@@ -119,7 +128,7 @@ class ProductItems extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "Review (rating)",
+                    "Review (${productsEntity.rating?.toStringAsFixed(1)})",
                     maxLines: 1,
                     style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           fontSize: 14.sp,

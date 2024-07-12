@@ -1,4 +1,3 @@
-
 import '../../../domin/entity/ProductResponseEntity.dart';
 
 class ProductResponseDto extends ProductResponseEntity {
