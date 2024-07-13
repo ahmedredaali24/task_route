@@ -66,7 +66,7 @@ class ProductItems extends StatelessWidget {
                         backgroundColor: Colors.white,
                         // radius: MediaQuery.of(context).size.aspectRatio * 30,
                         child: Center(
-                          child: LikeButtonWidget(),
+                          child: LikeButtonWidget(productId: productsEntity.id??0,),
                         )),
                   )
                 ],
