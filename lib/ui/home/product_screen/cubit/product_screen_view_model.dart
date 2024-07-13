@@ -13,10 +13,17 @@ class ProductScreenViewModel extends Cubit<ProductScreenStates> {
   List<ProductsEntity> productList = [];
   int numOfCartItem = 0;
   final bool isWishListed = false;
+  bool showLoading = false;
+
+  void startDelay() async {
+    await Future.delayed(Duration(seconds: 3));
+    showLoading = true;
+  }
 
   Future<void> refreshProducts() async {
     await getProducts();
   }
+
   Future<void> getProducts() async {
     emit(ProductScreenLoadingState(loadingMessage: "Loading..."));
     var either = await getProductUseCase.invoke();
@@ -26,4 +33,5 @@ class ProductScreenViewModel extends Cubit<ProductScreenStates> {
       emit(ProductScreenSuccessState(productResponseEntity: r));
     });
   }
+
 }

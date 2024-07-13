@@ -26,8 +26,7 @@ class ProductScreenView extends StatelessWidget {
           return Scaffold(
             body: RefreshIndicator(
               color: AppColors.primaryColor,
-
-              onRefresh:  viewModel.refreshProducts,
+              onRefresh: viewModel.refreshProducts,
               child: SafeArea(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 17.w),
@@ -68,17 +67,17 @@ class ProductScreenView extends StatelessWidget {
                         ),
                         state is ProductScreenLoadingState
                             ? Expanded(
-                              child: Center(
+                                child: Center(
                                   child: SizedBox(
-                                    height:
-                                        MediaQuery.of(context).size.height * 0.5,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.5,
                                     child: Lottie.asset(
                                       "assets/animation/lodaing.json",
                                       width: 200.w,
                                     ),
                                   ),
                                 ),
-                            )
+                              )
                             : state is ProductScreenSuccessState
                                 ? Expanded(
                                     child: GridView.builder(
@@ -105,17 +104,35 @@ class ProductScreenView extends StatelessWidget {
                                   )
                                 : state is ProductScreenErrorState
                                     ? Expanded(
-                                      child: Center(
-
-                                          child: SizedBox(
-                                            height: 500.h,
-                                            child: Lottie.asset(
-                                              "assets/animation/error.json",
-                                              width: 200.w,
+                                        child: Column(
+                                          children: [
+                                            Expanded(
+                                              child: Center(
+                                                child: SizedBox(
+                                                  height: 500.h,
+                                                  child: Lottie.asset(
+                                                    "assets/animation/error.json",
+                                                    width: 200.w,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                            MaterialButton(
+                                                onPressed: () {
+                                                  viewModel.refreshProducts();
+                                                },
+                                                child: Text(
+                                                  "Reload",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleMedium
+                                                      ?.copyWith(
+                                                          color: AppColors
+                                                              .primaryColor),
+                                                )),
+                                          ],
                                         ),
-                                    )
+                                      )
                                     : Container()
                       ]),
                 ),
