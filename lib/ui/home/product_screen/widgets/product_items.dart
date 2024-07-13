@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:like_button/like_button.dart';
@@ -5,7 +6,9 @@ import 'package:like_button/like_button.dart';
 import 'dart:math';
 
 import '../../../../domin/entity/ProductResponseEntity.dart';
+import '../../../utils/add_button_widget.dart';
 import '../../../utils/app_colors.dart';
+import '../../../utils/like_button.dart';
 
 class ProductItems extends StatelessWidget {
   final ProductsEntity productsEntity;
@@ -40,49 +43,30 @@ class ProductItems extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(15.r),
                         topRight: Radius.circular(15.r)),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Container(
-                        color: randomColor,
-                        child: Image.network(
-                          "${productsEntity.thumbnail}",
-                          fit: BoxFit.fill,
-                          width: 191.w,
-                          height: MediaQuery.of(context).size.height * 0.13,
-                        ),
+                    child: Container(
+                      color: randomColor,
+                      child: CachedNetworkImage(
+                        imageUrl: "${productsEntity.thumbnail}",
+                        fit: BoxFit.fill,
+                        width: 191.w,
+                        height: MediaQuery.of(context).size.height * 0.13,
+                        placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(
+                          backgroundColor: AppColors.primaryColor,
+                        )),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
                     ),
                   ),
                   Positioned(
                     top: MediaQuery.of(context).size.height * .005,
                     right: MediaQuery.of(context).size.width * .005,
-                    child: CircleAvatar(
+                    child:  CircleAvatar(
                         backgroundColor: Colors.white,
                         // radius: MediaQuery.of(context).size.aspectRatio * 30,
                         child: Center(
-                          child: LikeButton(
-                            
-                            // size: 50,
-                            circleColor: const CircleColor(
-                                start: Colors.red, end: Colors.blue),
-                            bubblesColor: const BubblesColor(
-
-                              dotPrimaryColor: Colors.pink,
-                              dotSecondaryColor: Colors.white,
-                            ),
-                            likeBuilder: (bool isLiked) {
-                              return isLiked
-                                  ? Icon(
-                                      size: 30,
-                                      Icons.favorite_rounded,
-                                      color: AppColors.primaryColor,
-                                    )
-                                  : const Icon(
-                                      Icons.favorite_border_rounded,
-                                      color: AppColors.primaryColor,
-                                    );
-                            },
-                          ),
+                          child: LikeButtonWidget(),
                         )),
                   )
                 ],
@@ -147,33 +131,7 @@ class ProductItems extends StatelessWidget {
                   const Spacer(
                     flex: 1,
                   ),
-                  InkWell(
-                    onTap: () {
-                      //todo: add to cart
-
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          action: SnackBarAction(
-                            onPressed: () {},
-                            label: "close",
-                            textColor: Colors.white,
-                            // backgroundColor: AppColors.whiteColor,
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor:
-                              AppColors.primaryColor.withOpacity(.9),
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.r)),
-                          duration: const Duration(milliseconds: 1000),
-                          content: const Center(child: Text('Add to Cart'))));
-                    },
-                    splashColor: Colors.transparent,
-                    child: Icon(
-                      Icons.add_circle,
-                      size: 32.sp,
-                      color: AppColors.primaryColor,
-                    ),
-                  )
+                  const AddButtonWidget(),
                 ],
               ),
             )
